@@ -65,13 +65,49 @@ class _AnadirMaestroPageState extends State<AnadirMaestroPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                _registrarMaestro();
+                _confirmarDatos();
               },
               child: const Text('Registrar Maestro'),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _confirmarDatos() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar Datos'),
+          content: Column(
+            children: [
+              Text('Nombre: ${_nombreController.text}'),
+              Text('Correo: ${_emailController.text}'),
+              Text('Contraseña: ${_passwordController.text}'),
+              Text('Grado: ${_gradoController.text}'),
+              Text('Grupo: ${_grupoController.text}'),
+              Text('Asignaturas: ${_asignaturasSeleccionadas.join(', ')}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el cuadro de diálogo
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el cuadro de diálogo
+                _registrarMaestro(); // Registrar el maestro
+              },
+              child: const Text('Confirmar'),
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -30,6 +30,7 @@ class Crear {
         'grado': grado,
         'grupo': grupo,
         'asignaturas': asignaturas,
+        'permiso': 'profesor',
       });
 
       print('Profesor registrado exitosamente.');
