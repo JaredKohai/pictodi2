@@ -77,16 +77,33 @@ class _AnadirPsicologoPageState extends State<AnadirPsicologoPage> {
   }
 
   void _registrarPsicologo() {
-    Crear().registerPsicologo(
-      _emailController.text,
-      _passwordController.text,
-      _nombreController.text,
-      _especialidadController.text,
-      '${_gradoController.text}${_grupoController.text}',
-    );
-    SnackBar(
-      content: Text('Psicólogo registrado correctamente'),
-      duration: Duration(seconds: 2),
-    );
+    if (_camposNoVacios() && _validarCampos()) {
+      Crear().registerPsicologo(
+        _emailController.text,
+        _passwordController.text,
+        _nombreController.text,
+        _especialidadController.text,
+        '${_gradoController.text}${_grupoController.text}',
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Psicólogo registrado correctamente'),
+        ),
+      );
+    }
+  }
+
+  bool _camposNoVacios() {
+    return _nombreController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty &&
+        _especialidadController.text.isNotEmpty &&
+        _gradoController.text.isNotEmpty &&
+        _grupoController.text.isNotEmpty;
+  }
+
+  bool _validarCampos() {
+    // Puedes agregar más lógica de validación según tus requisitos
+    return true;
   }
 }

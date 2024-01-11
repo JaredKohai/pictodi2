@@ -11,7 +11,6 @@ class Crear {
     List<String> asignaturas,
   ) async {
     try {
-      // Crear usuario en Firebase Authentication
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -20,7 +19,6 @@ class Crear {
 
       String userId = userCredential.user!.uid;
 
-      // Agregar información del profesor a la colección 'profesores' en Firestore
       await FirebaseFirestore.instance
           .collection('profesores')
           .doc(userId)
@@ -57,6 +55,7 @@ class Crear {
         'id': userId,
         'nombre': nombre,
         'correo': correo,
+        'permiso': 'director',
       });
 
       print('Director registrado exitosamente.');
@@ -92,7 +91,7 @@ class Crear {
         'grado_escolar': gradoEscolar,
         'grupo': grupos,
         'gravedad': gravedad,
-        'permiso': 'nino', // Agregar el campo 'permiso' con el valor 'nino'
+        'permiso': 'nino',
       });
 
       print('Niño registrado exitosamente.');
@@ -116,7 +115,7 @@ class Crear {
         'id': userId,
         'nombre': nombre,
         'hijos': hijos,
-        'permiso': 'padre', // Agregar el campo 'permiso' con el valor 'padre'
+        'permiso': 'padre',
       });
 
       print('Padre registrado exitosamente.');
@@ -149,6 +148,28 @@ class Crear {
       print('Psicólogo registrado exitosamente.');
     } catch (e) {
       print('Error al registrar psicólogo: $e');
+    }
+  }
+
+  Future<void> registerAdmin(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      String userId = userCredential.user!.uid;
+
+      await FirebaseFirestore.instance.collection('admins').doc(userId).set({
+        'id': userId,
+        'email': email,
+        'permiso': 'admin',
+      });
+
+      print('Admin registrado exitosamente.');
+    } catch (e) {
+      print('Error al registrar admin: $e');
     }
   }
 }

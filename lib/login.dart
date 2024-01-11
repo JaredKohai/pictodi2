@@ -10,6 +10,8 @@ import 'home/profesor_page.dart';
 import 'home/psicologo_page.dart';
 import 'home/nino_page.dart';
 import 'home/padre_page.dart';
+import 'home/admin_page.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -97,24 +99,33 @@ class _LoginPageState extends State<LoginPage> {
           if (permiso == 'director') {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => DirectorPage(nombre: nombre)),
+              MaterialPageRoute(
+                  builder: (context) => DirectorPage(nombre: nombre)),
             );
           } else if (permiso == 'profesor') {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ProfesorPage(nombre: nombre)),
+              MaterialPageRoute(
+                  builder: (context) => ProfesorPage(nombre: nombre)),
             );
           } else if (permiso == 'padre') {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => PadrePage(nombre: nombre)),
+              MaterialPageRoute(
+                  builder: (context) => PadrePage(nombre: nombre)),
             );
           } else if (permiso == 'psicologo') {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => PsicologoPage(nombre: nombre)),
+              MaterialPageRoute(
+                  builder: (context) => PsicologoPage(nombre: nombre)),
             );
-          } else if (permiso == 'nino') {
+          } else if (permiso == 'admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminPage(nombre: nombre)),
+          );
+        }else if (permiso == 'nino') {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => NinoPage(nombre: nombre)),
@@ -142,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: <Widget>[
             Container(
-              height: 400,
+              height: 330,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/background.png'),

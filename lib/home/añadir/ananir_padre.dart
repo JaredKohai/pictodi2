@@ -14,11 +14,9 @@ class _AnadirPadrePageState extends State<AnadirPadrePage> {
   final TextEditingController _contrasenaController = TextEditingController();
 
   List<String> _ninosSeleccionados = [];
-  List<Nino> _ninos = []; // Asegúrate de obtener esta lista de Firestore
+  List<Nino> _ninos = [];
 
-  // Método para cargar la lista de niños desde Firestore
   Future<void> _cargarNinosDesdeFirestore() async {
-    // Puedes personalizar esta lógica según tu estructura de Firestore
     QuerySnapshot ninosSnapshot =
         await FirebaseFirestore.instance.collection('niños').get();
 
@@ -32,23 +30,61 @@ class _AnadirPadrePageState extends State<AnadirPadrePage> {
   @override
   void initState() {
     super.initState();
-    // Llama a la carga de niños al inicializar el widget
     _cargarNinosDesdeFirestore();
   }
 
   void _registrarPadre() {
-    Crear creador = Crear();
+    if (_camposNoVacios() && _validarCampos()) {
+      Crear creador = Crear();
 
-    creador.registerPadre(
-      _correoController.text,
-      _contrasenaController.text,
-      _nombreController.text,
-      _ninosSeleccionados,
-    );
+      creador.registerPadre(
+        _correoController.text,
+        _contrasenaController.text,
+        _nombreController.text,
+        _ninosSeleccionados,
+      );
 
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Padre registrado exitosamente.'),
+        ),
+      );
+    }
+  }
+
+  bool _camposNoVacios() {
+    return _nombreController.text.isNotEmpty &&
+        _correoController.text.isNotEmpty &&
+        _contrasenaController.text.isNotEmpty;
+  }
+
+  bool _validarCampos() {
+    // Validar el formato de correo electrónico
+    if (!_correoValido(_correoController.text)) {
+      _mostrarMensajeError('Formato de correo no válido.');
+      return false;
+    }
+
+    // Validar la longitud de la contraseña
+    if (_contrasenaController.text.length < 6) {
+      _mostrarMensajeError('La contraseña debe tener al menos 6 caracteres.');
+      return false;
+    }
+
+    return true;
+  }
+
+  bool _correoValido(String correo) {
+    // Implementa tu lógica de validación de correo electrónico aquí
+    // Puedes usar expresiones regulares o cualquier otro método de validación
+    return correo.contains('@');
+  }
+
+  void _mostrarMensajeError(String mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Padre registrado exitosamente.'),
+      SnackBar(
+        content: Text('Error: $mensaje'),
+        backgroundColor: Colors.red,
       ),
     );
   }
