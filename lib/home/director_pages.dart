@@ -221,6 +221,14 @@ class ListaRegistrosPage extends StatelessWidget {
 
   ListaRegistrosPage({required this.category});
 
+  Future<void> _eliminarRegistro(String docId) async {
+    try {
+      await FirebaseFirestore.instance.collection(category).doc(docId).delete();
+    } catch (e) {
+      print('Error al eliminar el registro: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,9 +248,35 @@ class ListaRegistrosPage extends StatelessWidget {
             return ListView.builder(
               itemCount: registros.length,
               itemBuilder: (context, index) {
+                String nombre = registros[index]['nombre'].toString();
+                String docId = registros[index].id;
+
                 return ListTile(
-                  title: Text(registros[index]['nombre']
-                      .toString()), // Cambiar por el campo apropiado
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(nombre),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              // Agregar la lógica para la edición si es necesario
+                              // Puedes navegar a una página de edición aquí
+                              // Navigator.push(context, MaterialPageRoute(...));
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              print('Botón de eliminar presionado');
+                              _eliminarRegistro(docId);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                   // Agregar más detalles según sea necesario
                 );
               },

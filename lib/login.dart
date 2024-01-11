@@ -12,7 +12,6 @@ import 'home/nino_page.dart';
 import 'home/padre_page.dart';
 import 'home/admin_page.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -81,6 +80,15 @@ class _LoginPageState extends State<LoginPage> {
               .collection('niños')
               .doc(user.uid)
               .get();
+        } else if (await FirebaseFirestore.instance
+            .collection('admin')
+            .doc(user.uid)
+            .get()
+            .then((value) => value.exists)) {
+          userDoc = await FirebaseFirestore.instance
+              .collection('admin')
+              .doc(user.uid)
+              .get();
         } else {
           // Manejar el caso cuando el usuario no pertenece a ninguna categoría conocida
           return;
@@ -121,11 +129,12 @@ class _LoginPageState extends State<LoginPage> {
                   builder: (context) => PsicologoPage(nombre: nombre)),
             );
           } else if (permiso == 'admin') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => AdminPage(nombre: nombre)),
-          );
-        }else if (permiso == 'nino') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AdminPage(nombre: nombre)),
+            );
+          } else if (permiso == 'nino') {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => NinoPage(nombre: nombre)),
